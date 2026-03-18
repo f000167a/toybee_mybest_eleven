@@ -15,9 +15,11 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px}
 
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(255,215,0,0.9);color:#0c1220;padding:10px 24px;border-radius:20px;font-size:16px;font-weight:700;z-index:100;display:none;max-width:90%}
-.header{text-align:center;padding:36px 16px 20px}
+.header{text-align:center;padding:36px 16px 12px}
 .header-sub{font-size:14px;letter-spacing:4px;color:#FFD700;opacity:0.7}
 .header h1{font-size:32px;font-weight:900;margin:6px 0 0;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.how-to{max-width:400px;margin:0 auto;padding:10px 20px 20px;text-align:center;font-size:14px;color:#94a3b8;line-height:1.9}
+.how-to strong{color:#cbd5e1}
 .pos-btns{display:flex;gap:10px;justify-content:center;padding:0 16px 16px}
 .pos-btn{flex:1;max-width:90px;padding:14px 4px;border-radius:12px;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08)}
 .pos-btn.active{background:var(–lc-bg);border:2px solid var(–lc)}
@@ -35,7 +37,6 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 .list-item .song-name{font-size:17px;color:#f1f5f9;flex:1;line-height:1.3}
 .list-item .move-btns{display:flex;flex-direction:column;gap:1px;flex-shrink:0}
 .list-item .move-btn{background:none;border:none;color:#64748b;font-size:12px;padding:1px 4px;line-height:1}
-.list-item .move-btn:not(:disabled):hover{color:#FFD700}
 .list-item .move-btn:disabled{opacity:0.2;cursor:default}
 .list-item .rm-btn{background:none;border:none;color:#ef4444;font-size:16px;padding:4px 6px;font-weight:700;flex-shrink:0}
 .list-ctrls{display:flex;gap:10px;justify-content:center;margin-top:14px}
@@ -100,6 +101,12 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 <div class="header">
   <div class="header-sub">🐝 TOYBEE</div>
   <h1>マイベストイレブン</h1>
+</div>
+
+<div class="how-to">
+  <strong>GK・DF・MF・FW</strong>を選んで曲を配置しよう（各最大5曲、計11曲）<br>
+  ▲▼で同ポジション内の並べ替えができます<br>
+  完成画像では、同ポジションの曲が<strong>左から順</strong>に並びます
 </div>
 
 <div class="pos-btns" id="posBtns"></div>
@@ -228,24 +235,30 @@ function renderList(){
         div.className="list-item";
         div.style.borderLeft="3px solid "+LC[l.key];
 
-        var upDis=idx===0?"disabled":"";
-        var dnDis=idx===len-1?"disabled":"";
+        var upDis=idx===0?" disabled":"";
+        var dnDis=idx===len-1?" disabled":"";
         var moveBtns=len>1?
           '<div class="move-btns">'
-          +'<button class="move-btn" data-lk="'+l.key+'" data-idx="'+idx+'" data-dir="-1" '+upDis+'>▲</button>'
-          +'<button class="move-btn" data-lk="'+l.key+'" data-idx="'+idx+'" data-dir="1" '+dnDis+'>▼</button>'
+          +'<button class="move-btn"'+upDis+'>▲</button>'
+          +'<button class="move-btn"'+dnDis+'>▼</button>'
           +'</div>':'';
 
         div.innerHTML='<span class="pos-tag" style="color:'+LC[l.key]+';background:'+LC[l.key]+'15">'+l.label+'</span>'
           +'<span class="dot" style="background:'+(si?si.color:"#fff")+'"></span>'
           +'<span class="song-name">'+esc(title)+'</span>'
           +moveBtns
-          +'<button class="rm-btn" data-lk="'+l.key+'" data-idx="'+idx+'">✕</button>';
+          +'<button class="rm-btn">✕</button>';
 
-        div.querySelectorAll(".move-btn").forEach(function(b){
-          b.onclick=function(){swapSong(b.dataset.lk,parseInt(b.dataset.idx),parseInt(b.dataset.dir))};
-        });
-        div.querySelector(".rm-btn").onclick=function(){fm[l.key].splice(idx,1);render()};
+        var moveButtons=div.querySelectorAll(".move-btn");
+        if(moveButtons.length===2){
+          (function(lk,i){
+            moveButtons[0].onclick=function(){swapSong(lk,i,-1)};
+            moveButtons[1].onclick=function(){swapSong(lk,i,1)};
+          })(l.key,idx);
+        }
+        (function(lk,i){
+          div.querySelector(".rm-btn").onclick=function(){fm[lk].splice(i,1);render()};
+        })(l.key,idx);
         body.appendChild(div);
       });
     });
