@@ -297,21 +297,21 @@ function drawImage(){
       var x=startX+si*spacing;
       var sInfo=getInfo(title);var col=sInfo?sInfo.color:"#FFD700";
       // Shadow
-      ctx.beginPath();ctx.arc(x,y+3,32,0,Math.PI*2);ctx.fillStyle="rgba(0,0,0,0.3)";ctx.fill();
+      ctx.beginPath();ctx.arc(x,y+3,34,0,Math.PI*2);ctx.fillStyle="rgba(0,0,0,0.3)";ctx.fill();
       // Ball
-      ctx.beginPath();ctx.arc(x,y,30,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,32,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
       ctx.strokeStyle="rgba(255,255,255,0.4)";ctx.lineWidth=2.5;ctx.stroke();
       // Label
       ctx.fillStyle=col==="#E8E8E8"?"#333":"#0c1220";
-      ctx.font="bold 15px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="bold 17px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.fillText(line.label,x,y);
       // Song name
-      ctx.fillStyle="#fff";ctx.font="bold 18px sans-serif";ctx.textBaseline="top";
-      var maxW=spacing-10;
+      ctx.fillStyle="#fff";ctx.font="bold 22px sans-serif";ctx.textBaseline="top";
+      var maxW=spacing-8;
       if(ctx.measureText(title).width>maxW){
         var mid=Math.floor(title.length/2);
         for(var i=mid;i>0;i--){if("\u30FB -!".indexOf(title[i])>=0){mid=i;break}}
-        ctx.fillText(title.slice(0,mid),x,y+34);ctx.fillText(title.slice(mid),x,y+56);
+        ctx.fillText(title.slice(0,mid),x,y+34);ctx.fillText(title.slice(mid),x,y+60);
       }else{ctx.fillText(title,x,y+34)}
       ctx.textBaseline="alphabetic";
     });
