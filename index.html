@@ -208,8 +208,7 @@ function renderPicker(){
     b.innerHTML='<span class="dot" style="background:'+s.color+'"></span><span class="name">'+esc(s.title)+'</span><span class="status" style="color:'+(u?"#64748b":LC[sel])+'">'+(u?"✔":"+")+'</span>';
     b.onclick=function(){if(!u)addSong(s.title)};sd.appendChild(b)});
 }
-function addSong(t){if(!sel)return;var l=LINES.find(function(x){return x.key===sel});if(fm[sel].length>=l.max){showToast(sel+"は最大"+l.max+"曲");return}if(getAllSel().has(t)){showToast("選択済み");return}if(getTotal()>=11){showToast("11曲まで！");return}fm[sel].push(t);showToast(t+" → "+sel);render();
-  // GK reminder
+function addSong(t){if(!sel)return;var l=LINES.find(function(x){return x.key===sel});if(fm[sel].length>=l.max){showToast(sel+"は最大"+l.max+"曲");return}if(getAllSel().has(t)){showToast("選択済み");return}if(getTotal()>=11){showToast("11曲まで！");return}fm[sel].push(t);showToast(t+" → "+sel);var sy=window.scrollY;render();window.scrollTo(0,sy+52);
   var tot=getTotal();if(tot>=10&&fm.GK.length===0){setTimeout(function(){showToast("GKを1曲選んでください");sel="GK";render();document.getElementById("picker").scrollIntoView({behavior:"smooth"})},1200)}}
 function resetAll(){fm={GK:[],DF:[],MF:[],FW:[]};sel=null;closeResult();showToast("リセット");render()}
 
@@ -246,7 +245,7 @@ function showResult(){
 function closeResult(){document.getElementById("modalBg").style.display="none"}
 
 function drawImage(){
-  var canvas=document.getElementById("cvs"),W=1000,H=1120,dpr=2;
+  var canvas=document.getElementById("cvs"),W=1000,H=1200,dpr=2;
   canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+"px";canvas.style.height=H+"px";
   var ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
   // Field bg
@@ -254,8 +253,8 @@ function drawImage(){
   grad.addColorStop(0,"#1a6b33");grad.addColorStop(0.5,"#1e7a3a");grad.addColorStop(1,"#1a472a");
   ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
   // Title area (darker top)
-  var tg=ctx.createLinearGradient(0,0,0,120);tg.addColorStop(0,"rgba(0,0,0,0.4)");tg.addColorStop(1,"rgba(0,0,0,0)");
-  ctx.fillStyle=tg;ctx.fillRect(0,0,W,120);
+  var tg=ctx.createLinearGradient(0,0,0,130);tg.addColorStop(0,"rgba(0,0,0,0.4)");tg.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=tg;ctx.fillRect(0,0,W,130);
 
   // Title
   ctx.fillStyle="rgba(255,255,255,0.6)";ctx.font="bold 16px sans-serif";ctx.textAlign="center";
@@ -266,13 +265,13 @@ function drawImage(){
   ctx.fillText(getFmStr(),W/2,96);
 
   // Halfway line + circle (above FW)
-  var midY=155;
+  var midY=160;
   ctx.strokeStyle="rgba(255,255,255,0.2)";ctx.lineWidth=1.5;
   ctx.beginPath();ctx.moveTo(30,midY);ctx.lineTo(W-30,midY);ctx.stroke();
   ctx.beginPath();ctx.arc(W/2,midY,50,0,Math.PI*2);ctx.stroke();
 
   // Penalty area (bottom, for GK)
-  var paTop=890,paW=380,paH=180;
+  var paTop=960,paW=380,paH=190;
   ctx.strokeStyle="rgba(255,255,255,0.15)";ctx.lineWidth=1;
   ctx.beginPath();ctx.rect((W-paW)/2,paTop,paW,paH);ctx.stroke();
   // Goal area
@@ -284,7 +283,7 @@ function drawImage(){
   ctx.beginPath();ctx.arc(W/2,arcCy,arcR,Math.PI+arcAngle,-arcAngle,false);ctx.stroke();
 
   // Player positions: FW→MF→DF→GK (top to bottom, all in own half)
-  var rowYs={FW:260,MF:470,DF:700,GK:970};
+  var rowYs={FW:270,MF:500,DF:740,GK:1050};
   var lineOrder=["FW","MF","DF","GK"];
 
   lineOrder.forEach(function(key){
@@ -303,16 +302,28 @@ function drawImage(){
       ctx.strokeStyle="rgba(255,255,255,0.4)";ctx.lineWidth=2.5;ctx.stroke();
       // Label
       ctx.fillStyle=col==="#E8E8E8"?"#333":"#0c1220";
-      ctx.font="bold 17px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="bold 18px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.fillText(line.label,x,y);
-      // Song name
-      ctx.fillStyle="#fff";ctx.font="bold 22px sans-serif";ctx.textBaseline="top";
+      // Song name - up to 3 lines
+      ctx.fillStyle="#fff";ctx.font="bold 18px sans-serif";ctx.textBaseline="top";
       var maxW=spacing-8;
-      if(ctx.measureText(title).width>maxW){
-        var mid=Math.floor(title.length/2);
-        for(var i=mid;i>0;i--){if("\u30FB -!".indexOf(title[i])>=0){mid=i;break}}
-        ctx.fillText(title.slice(0,mid),x,y+34);ctx.fillText(title.slice(mid),x,y+60);
-      }else{ctx.fillText(title,x,y+34)}
+      var lines=[];
+      if(ctx.measureText(title).width<=maxW){lines=[title]}
+      else{
+        var remain=title;
+        while(remain.length>0&&lines.length<3){
+          if(ctx.measureText(remain).width<=maxW){lines.push(remain);remain="";break}
+          var cut=remain.length;
+          for(var ci=1;ci<=remain.length;ci++){if(ctx.measureText(remain.slice(0,ci)).width>maxW){cut=ci-1;break}}
+          var best=cut;
+          for(var cj=cut;cj>Math.floor(cut/2);cj--){if("\u30FB -!".indexOf(remain[cj])>=0){best=cj+1;break}}
+          if(best===cut)best=cut;
+          lines.push(remain.slice(0,best));remain=remain.slice(best);
+        }
+        if(remain.length>0&&lines.length>0)lines[lines.length-1]+=remain;
+      }
+      var lineH=22;var startY=y+36;
+      lines.forEach(function(ln,li){ctx.fillText(ln,x,startY+li*lineH)});
       ctx.textBaseline="alphabetic";
     });
   });
