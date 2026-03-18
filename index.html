@@ -14,69 +14,68 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px}
 
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(255,215,0,0.9);color:#0c1220;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:700;z-index:100;display:none}
-.header{text-align:center;padding:32px 16px 18px}
-.header-sub{font-size:12px;letter-spacing:4px;color:#FFD700;opacity:0.7}
-.header h1{font-size:28px;font-weight:900;margin:4px 0 0;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.pos-btns{display:flex;gap:8px;justify-content:center;padding:0 12px 14px}
-.pos-btn{flex:1;max-width:84px;padding:12px 4px;border-radius:10px;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(255,215,0,0.9);color:#0c1220;padding:10px 24px;border-radius:20px;font-size:16px;font-weight:700;z-index:100;display:none}
+.header{text-align:center;padding:36px 16px 20px}
+.header-sub{font-size:14px;letter-spacing:4px;color:#FFD700;opacity:0.7}
+.header h1{font-size:32px;font-weight:900;margin:6px 0 0;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pos-btns{display:flex;gap:10px;justify-content:center;padding:0 16px 16px}
+.pos-btn{flex:1;max-width:90px;padding:14px 4px;border-radius:12px;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08)}
 .pos-btn.active{background:var(–lc-bg);border:2px solid var(–lc)}
-.pos-btn .label{font-size:16px;font-weight:900;color:#94a3b8;letter-spacing:1px}
+.pos-btn .label{font-size:18px;font-weight:900;color:#94a3b8;letter-spacing:1px}
 .pos-btn.active .label{color:var(–lc)}
-.pos-btn .count{font-size:12px;color:#475569;margin-top:3px}
+.pos-btn .count{font-size:14px;color:#64748b;margin-top:4px}
 .pos-btn .count.full{color:#22c55e}
 
-.list-box{margin:0 12px 14px;background:rgba(0,0,0,0.2);border-radius:12px;border:1px solid rgba(255,255,255,0.06);padding:12px}
-.list-header{font-size:13px;color:#64748b;margin-bottom:8px;text-align:center}
-.list-empty{text-align:center;padding:18px 0;font-size:14px;color:#334155}
-.list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px}
-.list-item .pos-tag{font-size:11px;font-weight:800;width:28px;text-align:center;flex-shrink:0;border-radius:4px;padding:3px 0}
-.list-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.list-item .song-name{font-size:15px;color:#e2e8f0;flex:1;line-height:1.3}
-.list-item .rm-btn{background:none;border:none;color:#ef4444;font-size:14px;padding:2px 6px;font-weight:700;flex-shrink:0}
-.list-ctrls{display:flex;gap:8px;justify-content:center;margin-top:12px}
-.btn-reset{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:9px 16px;color:#ef4444;font-size:13px;font-weight:700}
-.btn-go{background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:8px;padding:10px 24px;color:#0c1220;font-size:15px;font-weight:800;display:none}
+.list-box{margin:0 16px 16px;background:rgba(0,0,0,0.2);border-radius:14px;border:1px solid rgba(255,255,255,0.08);padding:14px}
+.list-header{font-size:15px;color:#94a3b8;margin-bottom:10px;text-align:center}
+.list-empty{text-align:center;padding:20px 0;font-size:16px;color:#64748b}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:5px}
+.list-item .pos-tag{font-size:13px;font-weight:800;width:32px;text-align:center;flex-shrink:0;border-radius:5px;padding:4px 0}
+.list-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.list-item .song-name{font-size:17px;color:#f1f5f9;flex:1;line-height:1.3}
+.list-item .rm-btn{background:none;border:none;color:#ef4444;font-size:16px;padding:4px 8px;font-weight:700;flex-shrink:0}
+.list-ctrls{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.btn-reset{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:10px;padding:10px 18px;color:#ef4444;font-size:15px;font-weight:700}
+.btn-go{background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:10px;padding:12px 28px;color:#0c1220;font-size:17px;font-weight:800;display:none}
 
-.picker{margin:0 12px 16px;background:rgba(0,0,0,0.3);border-radius:12px;overflow:hidden;display:none}
-.picker-head{padding:12px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.picker-title{font-size:15px;font-weight:700}
-.picker-filters{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
-.filter-btn{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#94a3b8}
+.picker{margin:0 16px 20px;background:rgba(0,0,0,0.3);border-radius:14px;overflow:hidden;display:none}
+.picker-head{padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.picker-title{font-size:17px;font-weight:700}
+.picker-filters{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.filter-btn{padding:6px 12px;border-radius:14px;font-size:13px;font-weight:600;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#94a3b8}
 .filter-btn.active{background:rgba(255,215,0,0.2);border:1px solid rgba(255,215,0,0.4);color:#FFD700}
-.picker-songs{max-height:300px;overflow-y:auto;padding:8px 10px 10px}
-.song-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;margin-bottom:3px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid transparent;text-align:left}
+.picker-songs{max-height:340px;overflow-y:auto;padding:10px 12px 12px}
+.song-btn{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:4px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid transparent;text-align:left}
 .song-btn:disabled{opacity:0.3;cursor:default}
-.song-btn .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.song-btn .name{font-size:15px;color:#e2e8f0;flex:1}
-.song-btn .status{font-size:13px}
+.song-btn .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.song-btn .name{font-size:17px;color:#f1f5f9;flex:1}
+.song-btn .status{font-size:15px}
 
 .modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:50;display:none;align-items:center;justify-content:center;padding:12px}
-.modal{background:linear-gradient(180deg,#1a472a 0%,#165c2e 50%,#1a472a 100%);border-radius:16px;border:2px solid rgba(255,255,255,0.15);padding:24px 14px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
-.modal .field-line{position:absolute;top:48%;left:14px;right:14px;height:1px;background:rgba(255,255,255,0.08)}
-.modal .field-circle{position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,0.06)}
-.modal-header{text-align:center;margin-bottom:22px;position:relative}
-.modal-header .sub{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:3px}
-.modal-header h2{font-size:20px;font-weight:900;margin:2px 0;color:#FFD700}
-.modal-header .fm{font-size:13px;color:rgba(255,255,255,0.4)}
-.fm-row{margin-bottom:22px;position:relative}
-.fm-row .row-label{text-align:center;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:10px}
-.fm-row .row-items{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.modal{background:linear-gradient(180deg,#1a472a 0%,#165c2e 50%,#1a472a 100%);border-radius:18px;border:2px solid rgba(255,255,255,0.15);padding:26px 16px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal .field-line{position:absolute;top:48%;left:16px;right:16px;height:1px;background:rgba(255,255,255,0.08)}
+.modal .field-circle{position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;border:1px solid rgba(255,255,255,0.06)}
+.modal-header{text-align:center;margin-bottom:24px;position:relative}
+.modal-header .sub{font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:3px}
+.modal-header h2{font-size:22px;font-weight:900;margin:4px 0;color:#FFD700}
+.modal-header .fm{font-size:15px;color:rgba(255,255,255,0.4)}
+.fm-row{margin-bottom:24px;position:relative}
+.fm-row .row-items{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
 .fm-item{text-align:center}
-.fm-ball{width:38px;height:38px;border-radius:50%;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:2px solid rgba(255,255,255,0.3)}
-.fm-item .song{font-size:10px;color:#fff;font-weight:700;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,0.8);word-break:break-all}
+.fm-ball{width:42px;height:42px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid rgba(255,255,255,0.3)}
+.fm-item .song{font-size:11px;color:#fff;font-weight:700;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,0.8);word-break:break-all}
 
-.share-box{position:relative;margin-top:18px}
-.share-guide{background:rgba(0,0,0,0.3);border-radius:10px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.1)}
-.share-guide .title{font-size:13px;color:#FFD700;font-weight:700;margin-bottom:8px}
-.share-guide .steps{font-size:13px;color:#94a3b8;line-height:1.9}
-.share-btns{display:flex;gap:8px;justify-content:center}
-.btn-copy{border-radius:8px;padding:12px 20px;font-size:14px;font-weight:700;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);color:#FFD700}
+.share-box{position:relative;margin-top:20px}
+.share-guide{background:rgba(0,0,0,0.3);border-radius:12px;padding:16px 18px;margin-bottom:16px;border:1px solid rgba(255,215,0,0.1)}
+.share-guide .title{font-size:15px;color:#FFD700;font-weight:700;margin-bottom:10px}
+.share-guide .steps{font-size:15px;color:#cbd5e1;line-height:2}
+.share-btns{display:flex;gap:10px;justify-content:center}
+.btn-copy{border-radius:10px;padding:14px 22px;font-size:16px;font-weight:700;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);color:#FFD700}
 .btn-copy.done{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#22c55e}
-.btn-x{background:#000;border:1px solid #444;border-radius:8px;padding:12px 20px;color:#fff;font-size:14px;font-weight:700}
-.btn-close{display:block;margin:16px auto 0;background:none;border:none;color:rgba(255,255,255,0.3);font-size:13px}
+.btn-x{background:#000;border:1px solid #444;border-radius:10px;padding:14px 22px;color:#fff;font-size:16px;font-weight:700}
+.btn-close{display:block;margin:18px auto 0;background:none;border:none;color:rgba(255,255,255,0.35);font-size:15px}
 
-.footer{text-align:center;padding:20px 16px 28px;font-size:13px;color:#6b7280;line-height:1.8}
+.footer{text-align:center;padding:24px 16px 32px;font-size:14px;color:#6b7280;line-height:1.8}
 .footer a{color:#6b7280}
 </style>
 
@@ -155,6 +154,7 @@ var ALBUMS=[
 var ALL_SONGS=ALBUMS.flatMap(function(a){return a.songs.map(function(s){return{title:s,album:a.name,color:a.color}})});
 var LINES=[{key:"GK",label:"GK",max:1},{key:"DF",label:"DF",max:5},{key:"MF",label:"MF",max:5},{key:"FW",label:"FW",max:5}];
 var LC={GK:"#22c55e",DF:"#3b82f6",MF:"#a855f7",FW:"#ef4444"};
+var ALBUM_SHORT={"THE EARLY TOYBEE":"EARLY TOYBEE","REVIVAL":"REVIVAL","LOOKBACK TO THE FUTURE":"LOOKBACK","TOYROCK INVASION":"TOYROCK","Singles":"Singles"};
 
 var fm={GK:[],DF:[],MF:[],FW:[]};
 var sel=null;
@@ -229,13 +229,12 @@ function renderPicker(){
   var allBtn=document.createElement("button");
   allBtn.className="filter-btn"+(flt==="all"?" active":"");
   allBtn.textContent="ALL";
-  allBtn.style.fontSize="12px";allBtn.style.padding="4px 12px";
   allBtn.onclick=function(){flt="all";renderPicker()};
   filtersDiv.appendChild(allBtn);
   ALBUMS.forEach(function(a){
     var b=document.createElement("button");
     b.className="filter-btn"+(flt===a.name?" active":"");
-    b.textContent=a.name.length>14?a.name.slice(0,12)+"..":a.name;
+    b.textContent=ALBUM_SHORT[a.name]||a.name;
     if(flt===a.name){b.style.background=a.color+"20";b.style.borderColor=a.color+"60";b.style.color=a.color}
     b.onclick=function(){flt=a.name;renderPicker()};
     filtersDiv.appendChild(b);
@@ -252,7 +251,7 @@ function renderPicker(){
     btn.disabled=used;
     btn.innerHTML='<span class="dot" style="background:'+s.color+'"></span>'
       +'<span class="name">'+esc(s.title)+'</span>'
-      +'<span class="status" style="color:'+(used?"#475569":LC[sel])+'">'+(used?"✔":"+")+'</span>';
+      +'<span class="status" style="color:'+(used?"#64748b":LC[sel])+'">'+(used?"✔":"+")+'</span>';
     btn.onclick=function(){if(!used)addSong(s.title)};
     songsDiv.appendChild(btn);
   });
@@ -287,7 +286,7 @@ function showResult(){
   copied=false;
   document.getElementById("btnCopy").className="btn-copy";
   document.getElementById("btnCopy").textContent="🖼️ 画像をコピー";
-  document.getElementById("step1").style.color="#e2e8f0";
+  document.getElementById("step1").style.color="#f1f5f9";
   document.getElementById("step1").textContent='① 「画像をコピー」を押す';
 
   document.getElementById("modalFm").textContent=getFmStr();
@@ -299,7 +298,7 @@ function showResult(){
     if(songs.length===0)return;
     var div=document.createElement("div");
     div.className="fm-row";
-    var w=l.key==="GK"?100:Math.min(80,320/songs.length);
+    var w=l.key==="GK"?100:Math.min(84,340/songs.length);
     var items=songs.map(function(title){
       var si=getInfo(title);
       var col=si?si.color:"#FFD700";
@@ -308,7 +307,7 @@ function showResult(){
         +'<div class="fm-ball" style="background:'+col+';color:'+txtCol+';box-shadow:0 2px 10px '+col+'40">'+l.label+'</div>'
         +'<div class="song">'+esc(title)+'</div></div>';
     }).join("");
-    div.innerHTML='<div class="row-label">'+l.label+'</div><div class="row-items">'+items+'</div>';
+    div.innerHTML='<div class="row-items">'+items+'</div>';
     rows.appendChild(div);
   });
   document.getElementById("modalBg").style.display="flex";
@@ -348,8 +347,6 @@ function drawImage(){
     var songs=fm[line.key];
     if(songs.length===0)return;
     var y=rowYs[ri];
-    ctx.fillStyle="rgba(255,255,255,0.25)";ctx.font="bold 12px sans-serif";
-    ctx.textAlign="center";ctx.fillText(line.label,W/2,y-30);
     var spacing=Math.min(140,(W-80)/songs.length);
     var startX=W/2-(songs.length-1)*spacing/2;
     songs.forEach(function(title,si){
@@ -388,10 +385,7 @@ async function copyImage(){
     markCopied();
     showToast("画像をコピーしました！");
   }catch(e){
-    var url=canvas.toDataURL("image/png");
-    var a=document.createElement("a");a.href=url;a.download="toybee-best11.png";a.click();
-    markCopied();
-    showToast("画像を保存しました！");
+    showToast("コピーできませんでした。スクリーンショットをご利用ください");
   }
 }
 
