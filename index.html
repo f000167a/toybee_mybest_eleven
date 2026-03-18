@@ -281,10 +281,10 @@ function drawImage(){
   // Penalty arc (D shape above penalty area)
   var arcR=55,arcCy=paTop+35;
   var arcAngle=Math.asin(35/arcR);
-  ctx.beginPath();ctx.arc(W/2,arcCy,arcR,Math.PI+arcAngle,-arcAngle,true);ctx.stroke();
+  ctx.beginPath();ctx.arc(W/2,arcCy,arcR,Math.PI+arcAngle,-arcAngle,false);ctx.stroke();
 
   // Player positions: FW→MF→DF→GK (top to bottom, all in own half)
-  var rowYs={FW:210,MF:380,DF:570,GK:800};
+  var rowYs={FW:210,MF:380,DF:570,GK:775};
   var lineOrder=["FW","MF","DF","GK"];
 
   lineOrder.forEach(function(key){
@@ -336,5 +336,7 @@ function markDone(){var b=document.getElementById("btnShare");b.className="btn-s
 function openX(){window.open("https://x.com/intent/tweet?text="+encodeURIComponent("#toybeeマイベスト11"),"_blank")}
 render();
 </script>
+<script data-goatcounter="https://toybee-mybest11.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
