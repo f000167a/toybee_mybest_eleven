@@ -61,10 +61,10 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 .modal-midline{height:1px;background:rgba(255,255,255,0.15);margin:10px 0 16px;position:relative}
 .modal-midline::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.1)}
 .fm-row{margin-bottom:20px;position:relative}
-.fm-row .row-items{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
-.fm-item{text-align:center;width:68px}
-.fm-item.solo{width:90px}
-.fm-ball{width:40px;height:40px;border-radius:50%;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:2px solid rgba(255,255,255,0.3)}
+.fm-row .row-items{display:flex;justify-content:center;gap:4px;flex-wrap:nowrap}
+.fm-item{text-align:center;width:60px;flex-shrink:0}
+.fm-item.solo{width:80px}
+.fm-ball{width:36px;height:36px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:2px solid rgba(255,255,255,0.3)}
 .fm-item .song{font-size:10px;color:#fff;font-weight:700;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,0.8);word-break:break-all}
 /* Penalty area in modal */
 .modal-penalty{border:1px solid rgba(255,255,255,0.1);border-bottom:none;margin:12px auto 0;width:50%;padding:16px 0 0;display:flex;justify-content:center;position:relative}
@@ -213,7 +213,7 @@ function addSong(t){if(!sel)return;var l=LINES.find(function(x){return x.key===s
   var tot=getTotal();if(tot>=10&&fm.GK.length===0){setTimeout(function(){showToast("GKを1曲選んでください");sel="GK";render();document.getElementById("picker").scrollIntoView({behavior:"smooth"})},1200)}}
 function resetAll(){fm={GK:[],DF:[],MF:[],FW:[]};sel=null;closeResult();showToast("リセット");render()}
 
-function render(){renderPosBtns();renderList();renderPicker()}
+function render(){var sy=window.scrollY;renderPosBtns();renderList();renderPicker();window.scrollTo(0,sy)}
 
 function showResult(){
   document.getElementById("btnShare").className="btn-share";
