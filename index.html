@@ -147,9 +147,9 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 </div>
 <div class="footer">
   ※ 非公式のファンサイトです。toybee公式・関係者への本サイトに関するお問い合わせはご遠慮ください。<br>
-  作成：エフゼロ（<a href="https://x.com/inaken816" target="_blank" rel="noopener">X</a> / <a href="mailto:f000167a@yahoo.co.jp">メール</a>）
+  作成：エフゼロ（<a href="https://x.com/inaken816" target="_blank" rel="noopener">X</a> / <a href="/cdn-cgi/l/email-protection#197f292929282f2e78596078717676377a76377369">メール</a>）
 </div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var ALBUMS=[
   {name:"THE EARLY TOYBEE",color:"#DC2626",songs:["全米は泣かない","それゆけ!夢みるゾンビーズ!!","Flight Music","電脳ヴィジランテ","黎明グッドルーザー","あらしのよるに","いなせ","あほんだらいふ"]},
   {name:"REVIVAL",color:"#92400E",songs:["惑星ダブリス","Super Imagination","ワンタイムラヴァー","風知らぬひと","フロムアンダーランド","Teenage Black","シーラカンスと文学"]},
@@ -245,7 +245,7 @@ function showResult(){
 function closeResult(){document.getElementById("modalBg").style.display="none"}
 
 function drawImage(){
-  var canvas=document.getElementById("cvs"),W=1000,H=1200,dpr=2;
+  var canvas=document.getElementById("cvs"),W=1000,H=1260,dpr=2;
   canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+"px";canvas.style.height=H+"px";
   var ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
   // Field bg
@@ -257,12 +257,12 @@ function drawImage(){
   ctx.fillStyle=tg;ctx.fillRect(0,0,W,130);
 
   // Title
-  ctx.fillStyle="rgba(255,255,255,0.6)";ctx.font="bold 26px sans-serif";ctx.textAlign="center";
-  ctx.fillText("\u{1F41D}\u26BD TOYBEE",W/2,34);
-  ctx.fillStyle="#FFD700";ctx.font="bold 26px sans-serif";
-  ctx.fillText("\u30DE\u30A4\u30D9\u30B9\u30C8\u30A4\u30EC\u30D6\u30F3",W/2,68);
-  ctx.fillStyle="rgba(255,255,255,0.4)";ctx.font="16px sans-serif";
-  ctx.fillText(getFmStr(),W/2,94);
+  ctx.fillStyle="rgba(255,255,255,0.6)";ctx.font="bold 28px sans-serif";ctx.textAlign="center";
+  ctx.fillText("\u{1F41D}\u26BD TOYBEE",W/2,36);
+  ctx.fillStyle="#FFD700";ctx.font="bold 28px sans-serif";
+  ctx.fillText("\u30DE\u30A4\u30D9\u30B9\u30C8\u30A4\u30EC\u30D6\u30F3",W/2,72);
+  ctx.fillStyle="rgba(255,255,255,0.4)";ctx.font="18px sans-serif";
+  ctx.fillText(getFmStr(),W/2,98);
 
   // Halfway line + circle (above FW)
   var midY=160;
@@ -271,7 +271,7 @@ function drawImage(){
   ctx.beginPath();ctx.arc(W/2,midY,50,0,Math.PI*2);ctx.stroke();
 
   // Penalty area (bottom, for GK)
-  var paTop=960,paW=380,paH=190;
+  var paTop=1000,paW=380,paH=200;
   ctx.strokeStyle="rgba(255,255,255,0.15)";ctx.lineWidth=1;
   ctx.beginPath();ctx.rect((W-paW)/2,paTop,paW,paH);ctx.stroke();
   // Goal area
@@ -283,7 +283,7 @@ function drawImage(){
   ctx.beginPath();ctx.arc(W/2,arcCy,arcR,Math.PI+arcAngle,-arcAngle,false);ctx.stroke();
 
   // Player positions: FW→MF→DF→GK (top to bottom, all in own half)
-  var rowYs={FW:270,MF:500,DF:740,GK:1050};
+  var rowYs={FW:280,MF:520,DF:770,GK:1090};
   var lineOrder=["FW","MF","DF","GK"];
 
   lineOrder.forEach(function(key){
@@ -296,16 +296,16 @@ function drawImage(){
       var x=startX+si*spacing;
       var sInfo=getInfo(title);var col=sInfo?sInfo.color:"#FFD700";
       // Shadow
-      ctx.beginPath();ctx.arc(x,y+3,34,0,Math.PI*2);ctx.fillStyle="rgba(0,0,0,0.3)";ctx.fill();
+      ctx.beginPath();ctx.arc(x,y+3,36,0,Math.PI*2);ctx.fillStyle="rgba(0,0,0,0.3)";ctx.fill();
       // Ball
-      ctx.beginPath();ctx.arc(x,y,32,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,34,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
       ctx.strokeStyle="rgba(255,255,255,0.4)";ctx.lineWidth=2.5;ctx.stroke();
       // Label
       ctx.fillStyle=col==="#E8E8E8"?"#333":"#0c1220";
-      ctx.font="bold 18px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="bold 20px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.fillText(line.label,x,y);
       // Song name - up to 3 lines
-      ctx.fillStyle="#fff";ctx.font="bold 22px sans-serif";ctx.textBaseline="top";
+      ctx.fillStyle="#fff";ctx.font="bold 26px sans-serif";ctx.textBaseline="top";
       var maxW=spacing-8;
       var lines=[];
       if(ctx.measureText(title).width<=maxW){lines=[title]}
@@ -322,7 +322,7 @@ function drawImage(){
         }
         if(remain.length>0&&lines.length>0)lines[lines.length-1]+=remain;
       }
-      var lineH=26;var startY=y+36;
+      var lineH=30;var startY=y+38;
       lines.forEach(function(ln,li){ctx.fillText(ln,x,startY+li*lineH)});
       ctx.textBaseline="alphabetic";
     });
@@ -345,9 +345,4 @@ async function shareOrSave(){
 function closeSave(){document.getElementById("saveOverlay").className="save-overlay";markDone()}
 function markDone(){var b=document.getElementById("btnShare");b.className="btn-share done";b.textContent="✅ コピー・保存しました";var s=document.getElementById("step1");s.style.color="#22c55e";s.textContent="① 画像をコピー・保存 ✅"}
 function openX(){window.open("https://x.com/intent/tweet?text="+encodeURIComponent("#toybeeマイベスト11\nhttps://f000167a.github.io/toybee_mybest_eleven/"),"_blank")}
-render();
-</script>
-<script data-goatcounter="https://toybee-mybest11.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
-</body>
-</html>
+render()
