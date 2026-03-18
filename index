@@ -1,0 +1,347 @@
+import { useState, useCallback, useRef } from “react”;
+
+const ALBUMS = [
+{ name: “THE EARLY TOYBEE”, color: “#DC2626”, songs: [“全米は泣かない”,“それゆけ!夢みるゾンビーズ!!”,“Flight Music”,“電脳ヴィジランテ”,“黎明グッドルーザー”,“あらしのよるに”,“いなせ”,“あほんだらいふ”] },
+{ name: “REVIVAL”, color: “#92400E”, songs: [“惑星ダブリス”,“Super Imagination”,“ワンタイムラヴァー”,“風知らぬひと”,“フロムアンダーランド”,“Teenage Black”,“シーラカンスと文学”] },
+{ name: “LOOKBACK TO THE FUTURE”, color: “#E8E8E8”, songs: [“LOOKBACK”,“Golden Age”,“ステルオンナ”,“道化師のラブソング”,“ライド・アンド・ライブ”,“S.Y.S -Save Your Souls-”,“TO THE FUTURE”] },
+{ name: “TOYROCK INVASION”, color: “#EAB308”, songs: [“TOY ROCK -TOYBEEのテーマ-”,“シモキタ・モーニング・ブルース”,“CAT GIRL”,“Jonnie’s Rock’n’Roll Lamp”,“Playlist in your Heart”] },
+{ name: “Singles”, color: “#EC4899”, songs: [“ひとつだけ”,“ハナマル”] },
+];
+
+const ALL_SONGS = ALBUMS.flatMap(a => a.songs.map(s => ({ title: s, album: a.name, color: a.color })));
+
+const LINES = [
+{ key: “GK”, label: “GK”, max: 1 },
+{ key: “DF”, label: “DF”, max: 5 },
+{ key: “MF”, label: “MF”, max: 5 },
+{ key: “FW”, label: “FW”, max: 5 },
+];
+
+const LC = { GK: “#22c55e”, DF: “#3b82f6”, MF: “#a855f7”, FW: “#ef4444” };
+
+export default function ToybeeB11() {
+const [fm, setFm] = useState({ GK: [], DF: [], MF: [], FW: [] });
+const [sel, setSel] = useState(null);
+const [flt, setFlt] = useState(“all”);
+const [toast, setToast] = useState(””);
+const [showRes, setShowRes] = useState(false);
+const [copied, setCopied] = useState(false);
+const tt = useRef(null);
+const canvasRef = useRef(null);
+
+const total = Object.values(fm).flat().length;
+const allSel = new Set(Object.values(fm).flat());
+
+const flash = useCallback((m) => {
+setToast(m); clearTimeout(tt.current);
+tt.current = setTimeout(() => setToast(””), 2200);
+}, []);
+
+const info = (t) => ALL_SONGS.find(s => s.title === t);
+
+const add = (title) => {
+if (!sel) return;
+const line = LINES.find(l => l.key === sel);
+if (fm[sel].length >= line.max) { flash(`${sel}は最大${line.max}曲`); return; }
+if (allSel.has(title)) { flash(“選択済み”); return; }
+if (total >= 11) { flash(“11曲まで！”); return; }
+setFm(p => ({ …p, [sel]: […p[sel], title] }));
+flash(`${title} → ${sel}`);
+};
+
+const rm = (k, i) => setFm(p => ({ …p, [k]: p[k].filter((_, j) => j !== i) }));
+
+const reset = () => {
+setFm({ GK: [], DF: [], MF: [], FW: [] });
+setSel(null); setShowRes(false); setCopied(false); flash(“リセット”);
+};
+
+const fmStr = `${fm.DF.length}-${fm.MF.length}-${fm.FW.length}`;
+
+const drawImage = useCallback(() => {
+const canvas = canvasRef.current;
+if (!canvas) return;
+const W = 800, H = 1000, dpr = 2;
+canvas.width = W * dpr; canvas.height = H * dpr;
+canvas.style.width = W + “px”; canvas.style.height = H + “px”;
+const ctx = canvas.getContext(“2d”);
+ctx.scale(dpr, dpr);
+
+```
+const grad = ctx.createLinearGradient(0, 0, 0, H);
+grad.addColorStop(0, "#1a472a"); grad.addColorStop(0.5, "#1e6b35"); grad.addColorStop(1, "#1a472a");
+ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+
+ctx.strokeStyle = "rgba(255,255,255,0.1)"; ctx.lineWidth = 1;
+ctx.beginPath(); ctx.moveTo(40, H / 2); ctx.lineTo(W - 40, H / 2); ctx.stroke();
+ctx.beginPath(); ctx.arc(W / 2, H / 2, 50, 0, Math.PI * 2); ctx.stroke();
+ctx.beginPath(); ctx.rect(W * 0.25, 0, W * 0.5, 60); ctx.stroke();
+ctx.beginPath(); ctx.rect(W * 0.25, H - 60, W * 0.5, 60); ctx.stroke();
+
+ctx.fillStyle = "rgba(255,255,255,0.5)"; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "center";
+ctx.fillText("🐝⚽ TOYBEE", W / 2, 36);
+ctx.fillStyle = "#FFD700"; ctx.font = "bold 24px sans-serif";
+ctx.fillText("マイベストイレブン", W / 2, 66);
+ctx.fillStyle = "rgba(255,255,255,0.4)"; ctx.font = "14px sans-serif";
+ctx.fillText(fmStr, W / 2, 88);
+
+const rows = [...LINES].reverse();
+const rowYs = [140, 330, 540, 760];
+
+rows.forEach((line, ri) => {
+  const songs = fm[line.key];
+  if (songs.length === 0) return;
+  const y = rowYs[ri];
+
+  ctx.fillStyle = "rgba(255,255,255,0.25)"; ctx.font = "bold 12px sans-serif";
+  ctx.textAlign = "center"; ctx.fillText(line.label, W / 2, y - 30);
+
+  const spacing = Math.min(140, (W - 80) / songs.length);
+  const startX = W / 2 - (songs.length - 1) * spacing / 2;
+
+  songs.forEach((title, si) => {
+    const x = startX + si * spacing;
+    const sInfo = info(title);
+    const col = sInfo?.color || "#FFD700";
+
+    ctx.beginPath(); ctx.arc(x, y, 24, 0, Math.PI * 2);
+    ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.4)"; ctx.lineWidth = 2; ctx.stroke();
+
+    ctx.fillStyle = col === "#E8E8E8" ? "#333" : "#0c1220";
+    ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(line.label, x, y);
+
+    ctx.fillStyle = "#fff"; ctx.font = "bold 12px sans-serif"; ctx.textBaseline = "top";
+    const maxW = spacing - 10;
+    if (ctx.measureText(title).width > maxW) {
+      let mid = Math.floor(title.length / 2);
+      for (let i = mid; i > 0; i--) { if ("・ -!".includes(title[i])) { mid = i; break; } }
+      if (mid === Math.floor(title.length / 2) && !"・ -!".includes(title[mid])) mid = Math.floor(title.length / 2);
+      ctx.fillText(title.slice(0, mid), x, y + 30);
+      ctx.fillText(title.slice(mid), x, y + 46);
+    } else {
+      ctx.fillText(title, x, y + 30);
+    }
+    ctx.textBaseline = "alphabetic";
+  });
+});
+
+ctx.fillStyle = "rgba(255,255,255,0.2)"; ctx.font = "11px sans-serif"; ctx.textAlign = "center";
+ctx.fillText("#toybeeマイベスト11", W / 2, H - 30);
+ctx.fillText("⚠️ ファンによる非公式企画です", W / 2, H - 14);
+```
+
+}, [fm, fmStr]);
+
+const copyImage = useCallback(async () => {
+drawImage();
+const canvas = canvasRef.current;
+if (!canvas) return;
+try {
+const blob = await new Promise(r => canvas.toBlob(r, “image/png”));
+await navigator.clipboard.write([new ClipboardItem({ “image/png”: blob })]);
+setCopied(true);
+flash(“画像をコピーしました！”);
+} catch {
+const url = canvas.toDataURL(“image/png”);
+const a = document.createElement(“a”); a.href = url; a.download = “toybee-best11.png”; a.click();
+setCopied(true);
+flash(“画像を保存しました！”);
+}
+}, [drawImage, flash]);
+
+const openX = () => {
+window.open(`https://x.com/intent/tweet?text=${encodeURIComponent("#toybeeマイベスト11")}`, “_blank”);
+};
+
+const songs = flt === “all” ? ALL_SONGS : ALL_SONGS.filter(s => s.album === flt);
+const vlist = [];
+for (const l of LINES) for (const t of fm[l.key]) vlist.push({ title: t, lk: l.key });
+
+return (
+<div style={{ minHeight: “100vh”, background: “linear-gradient(175deg, #0c1220 0%, #162033 40%, #1a1a2e 100%)”, fontFamily: “‘Helvetica Neue’,‘Hiragino Kaku Gothic ProN’,sans-serif”, color: “#e2e8f0” }}>
+<canvas ref={canvasRef} style={{ display: “none” }} />
+
+```
+  {toast && <div style={{ position: "fixed", top: 20, left: "50%", transform: "translateX(-50%)", background: "rgba(255,215,0,0.9)", color: "#0c1220", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 700, zIndex: 100 }}>{toast}</div>}
+
+  {/* Header */}
+  <div style={{ textAlign: "center", padding: "32px 16px 18px" }}>
+    <div style={{ fontSize: 12, letterSpacing: 4, color: "#FFD700", opacity: 0.7 }}>🐝 TOYBEE</div>
+    <h1 style={{ fontSize: 28, fontWeight: 900, margin: "4px 0 0", background: "linear-gradient(135deg,#FFD700,#FFA500)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>マイベストイレブン</h1>
+  </div>
+
+  {/* Position Buttons */}
+  <div style={{ display: "flex", gap: 8, justifyContent: "center", padding: "0 12px 14px" }}>
+    {LINES.map(l => {
+      const act = sel === l.key;
+      const full = fm[l.key].length >= l.max;
+      return (
+        <button key={l.key} onClick={() => setSel(act ? null : l.key)}
+          style={{
+            flex: 1, maxWidth: 84, padding: "12px 4px", borderRadius: 10, cursor: "pointer", textAlign: "center",
+            background: act ? `${LC[l.key]}20` : "rgba(255,255,255,0.03)",
+            border: act ? `2px solid ${LC[l.key]}` : "1px solid rgba(255,255,255,0.08)",
+          }}>
+          <div style={{ fontSize: 16, fontWeight: 900, color: act ? LC[l.key] : "#94a3b8", letterSpacing: 1 }}>{l.label}</div>
+          <div style={{ fontSize: 12, color: full ? "#22c55e" : "#475569", marginTop: 3 }}>{fm[l.key].length}/{l.max}</div>
+        </button>
+      );
+    })}
+  </div>
+
+  {/* Vertical List */}
+  <div style={{ margin: "0 12px 14px", background: "rgba(0,0,0,0.2)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)", padding: 12 }}>
+    <div style={{ fontSize: 13, color: "#64748b", marginBottom: 8, textAlign: "center" }}>⚽ {total}/11</div>
+    {vlist.length === 0 ? (
+      <div style={{ textAlign: "center", padding: "18px 0", fontSize: 14, color: "#334155" }}>↑ ポジションを選んで曲を追加</div>
+    ) : (
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {vlist.map((item) => {
+          const si = info(item.title);
+          const li = fm[item.lk].indexOf(item.title);
+          return (
+            <div key={item.title} style={{
+              display: "flex", alignItems: "center", gap: 10, padding: "10px 12px",
+              background: "rgba(255,255,255,0.03)", borderRadius: 8,
+              borderLeft: `3px solid ${LC[item.lk]}`,
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: LC[item.lk], width: 28, textAlign: "center", flexShrink: 0, background: `${LC[item.lk]}15`, borderRadius: 4, padding: "3px 0" }}>{item.lk}</span>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: si?.color, flexShrink: 0 }} />
+              <span style={{ fontSize: 15, color: "#e2e8f0", flex: 1, lineHeight: 1.3 }}>{item.title}</span>
+              <button onClick={() => rm(item.lk, li)}
+                style={{ background: "none", border: "none", color: "#ef4444", fontSize: 14, cursor: "pointer", padding: "2px 6px", fontWeight: 700, flexShrink: 0 }}>✕</button>
+            </div>
+          );
+        })}
+      </div>
+    )}
+    <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
+      {total > 0 && <button onClick={reset} style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", borderRadius: 8, padding: "9px 16px", color: "#ef4444", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>リセット</button>}
+      {total === 11 && <button onClick={() => { setShowRes(true); setCopied(false); setTimeout(drawImage, 100); }} style={{ background: "linear-gradient(135deg,#FFD700,#FFA500)", border: "none", borderRadius: 8, padding: "10px 24px", color: "#0c1220", fontSize: 15, fontWeight: 800, cursor: "pointer" }}>⚽ ベスト11を見る！</button>}
+    </div>
+  </div>
+
+  {/* Song Picker */}
+  {sel && (
+    <div style={{ margin: "0 12px 16px", background: "rgba(0,0,0,0.3)", borderRadius: 12, border: `1px solid ${LC[sel]}30`, overflow: "hidden" }}>
+      <div style={{ padding: "12px 14px 10px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: LC[sel] }}>{sel}に入れる曲を選択</div>
+        <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginTop: 10 }}>
+          <button onClick={() => setFlt("all")} style={{ padding: "4px 12px", borderRadius: 12, fontSize: 12, fontWeight: 600, cursor: "pointer", background: flt === "all" ? "rgba(255,215,0,0.2)" : "rgba(255,255,255,0.04)", border: flt === "all" ? "1px solid rgba(255,215,0,0.4)" : "1px solid rgba(255,255,255,0.08)", color: flt === "all" ? "#FFD700" : "#94a3b8" }}>ALL</button>
+          {ALBUMS.map(a => (
+            <button key={a.name} onClick={() => setFlt(a.name)} style={{ padding: "4px 10px", borderRadius: 12, fontSize: 11, fontWeight: 600, cursor: "pointer", background: flt === a.name ? `${a.color}20` : "rgba(255,255,255,0.04)", border: flt === a.name ? `1px solid ${a.color}60` : "1px solid rgba(255,255,255,0.08)", color: flt === a.name ? a.color : "#94a3b8" }}>{a.name.length > 14 ? a.name.slice(0,12)+".." : a.name}</button>
+          ))}
+        </div>
+      </div>
+      <div style={{ maxHeight: 300, overflowY: "auto", padding: "8px 10px 10px" }}>
+        {songs.map(s => {
+          const used = allSel.has(s.title);
+          return (
+            <button key={s.title} onClick={() => !used && add(s.title)} disabled={used}
+              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", marginBottom: 3, borderRadius: 8, background: used ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.04)", border: "1px solid transparent", cursor: used ? "default" : "pointer", opacity: used ? 0.3 : 1, textAlign: "left" }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: s.color, flexShrink: 0 }} />
+              <span style={{ fontSize: 15, color: "#e2e8f0", flex: 1 }}>{s.title}</span>
+              {used ? <span style={{ fontSize: 11, color: "#475569" }}>✔</span> : <span style={{ fontSize: 13, color: LC[sel] }}>+</span>}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {/* Result Modal */}
+  {showRes && (
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.88)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 12 }}
+      onClick={() => setShowRes(false)}>
+      <div style={{
+        background: "linear-gradient(180deg,#1a472a 0%,#165c2e 50%,#1a472a 100%)",
+        borderRadius: 16, border: "2px solid rgba(255,255,255,0.15)",
+        padding: "24px 14px", maxWidth: 400, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative",
+      }} onClick={e => e.stopPropagation()}>
+        <div style={{ position: "absolute", top: "48%", left: 14, right: 14, height: 1, background: "rgba(255,255,255,0.08)" }} />
+        <div style={{ position: "absolute", top: "48%", left: "50%", transform: "translate(-50%,-50%)", width: 48, height: 48, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.06)" }} />
+
+        <div style={{ textAlign: "center", marginBottom: 22, position: "relative" }}>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", letterSpacing: 3 }}>🐝⚽ TOYBEE</div>
+          <h2 style={{ fontSize: 20, fontWeight: 900, margin: "2px 0", color: "#FFD700" }}>マイベストイレブン</h2>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{fmStr}</div>
+        </div>
+
+        {[...LINES].reverse().map(l => {
+          const s = fm[l.key];
+          if (s.length === 0) return null;
+          return (
+            <div key={l.key} style={{ marginBottom: 22, position: "relative" }}>
+              <div style={{ textAlign: "center", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 10 }}>{l.label}</div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+                {s.map(title => {
+                  const si = info(title);
+                  return (
+                    <div key={title} style={{ textAlign: "center", width: l.key === "GK" ? 100 : Math.min(80, 320 / s.length) }}>
+                      <div style={{
+                        width: 38, height: 38, borderRadius: "50%", margin: "0 auto 5px",
+                        background: si?.color || "#FFD700",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 11, fontWeight: 900, color: si?.color === "#E8E8E8" ? "#333" : "#0c1220",
+                        boxShadow: `0 2px 10px ${si?.color || "#FFD700"}40`,
+                        border: "2px solid rgba(255,255,255,0.3)",
+                      }}>{l.label}</div>
+                      <div style={{ fontSize: 10, color: "#fff", fontWeight: 700, lineHeight: 1.3, textShadow: "0 1px 4px rgba(0,0,0,0.8)", wordBreak: "break-all" }}>{title}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Share Flow */}
+        <div style={{ position: "relative", marginTop: 18 }}>
+          <div style={{
+            background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: "14px 16px", marginBottom: 14,
+            border: "1px solid rgba(255,215,0,0.1)",
+          }}>
+            <div style={{ fontSize: 13, color: "#FFD700", fontWeight: 700, marginBottom: 8 }}>Xでシェアする方法</div>
+            <div style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.9 }}>
+              <span style={{ color: copied ? "#22c55e" : "#e2e8f0" }}>① 「画像をコピー」を押す {copied ? "✅" : ""}</span><br />
+              ② 「Xを開く」を押す<br />
+              ③ 投稿画面で画像をペーストして投稿
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+            <button onClick={copyImage}
+              style={{
+                background: copied ? "rgba(34,197,94,0.15)" : "rgba(255,215,0,0.15)",
+                border: copied ? "1px solid rgba(34,197,94,0.4)" : "1px solid rgba(255,215,0,0.3)",
+                borderRadius: 8, padding: "12px 20px",
+                color: copied ? "#22c55e" : "#FFD700",
+                fontSize: 14, fontWeight: 700, cursor: "pointer",
+              }}>
+              {copied ? "✅ コピーしました" : "🖼️ 画像をコピー"}
+            </button>
+            <button onClick={openX}
+              style={{ background: "#000", border: "1px solid #444", borderRadius: 8, padding: "12px 20px", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+              𝕏 を開く
+            </button>
+          </div>
+        </div>
+
+        <button onClick={() => setShowRes(false)} style={{ display: "block", margin: "16px auto 0", background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 13, cursor: "pointer" }}>閉じる</button>
+      </div>
+    </div>
+  )}
+
+  {/* Footer */}
+  <div style={{ textAlign: "center", padding: "20px 16px 28px", fontSize: 13, color: "#6b7280", lineHeight: 1.8 }}>
+    ※ 非公式のファンサイトです。toybee公式・関係者への本サイトに関するお問い合わせはご遠慮ください。<br />
+    作成：エフゼロ（<a href="https://x.com/inaken816" target="_blank" rel="noopener" style={{ color: "#6b7280" }}>X</a> / <a href="mailto:f000167a@yahoo.co.jp" style={{ color: "#6b7280" }}>メール</a>）
+  </div>
+
+  <style>{`button:hover:not(:disabled){filter:brightness(1.15)}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px}`}</style>
+</div>
+```
+
+);
+}
